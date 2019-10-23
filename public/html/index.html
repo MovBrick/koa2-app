@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <title>LiuUi</title>
+    <script src="../javascripts/LiuUi.js"></script>
+    <style>
+        html, body{
+            width: 100vw;
+            height: 100vh;
+        }
+        #app{
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        table{
+            border-collapse: collapse;
+        }
+        table tr th, table tr td{
+            border: 1px solid #000;
+            font-size: 13px;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <table>
+            <tr>
+                <td colspan="3">
+                    &nbsp;hereUi使用方法<br>
+                    <!-- <script src="./hereUi.js"></script> -->
+                    &nbsp;const hereUi = new hereUi({<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;baseUrl: 'http://localhost:8080',       // 基础路由<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;requestInterceptors: function () {},    // 请求之前拦截器<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;responseInterceptors:  function () {}   // 响应数据返回之前拦截器<br>
+                    &nbsp;});
+                </td>
+            </tr>
+            <tr>
+                <th>方法</th>
+                <th>参数 (*为必填)</th>
+            </tr>
+            <tr>
+                <td>&nbsp;ajax</td>
+                <td>
+                    &nbsp;{<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;url: '',  // 传入字符串，请求接口*<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;data: {},  // 传入对象，发送数据*<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;type: ''  // 传入请求方式(默认是post) get post form<br>
+                    &nbsp;}
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;toast</td>
+                <td>
+                    &nbsp;text = ''  // 传入字符串*<br>
+                    &nbsp;direction = ''  // 传入字符串，设置显示方向 top middle bottom
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;sheet</td>
+                <td>
+                    &nbsp;{<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;title: '',  // 传入字符串，设置标题<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;option: [],  // 传入数组，设置选项(最多7个)*<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;cancel: '' // 传入字符串，设置取消按钮的文字<br>
+                    &nbsp;}
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;model</td>
+                <td>
+                    &nbsp;{<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;title: '',  // 传入字符串，设置标题<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;content: '',  // 传入字符串，设置内容*<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;sure: '',  // 传入字符串，设置确定按钮的文字<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;cancel: ''  // 传入字符串或true或false，设置取消按钮的文字<br>
+                    &nbsp;}
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;notice</td>
+                <td>
+                    &nbsp;text: ''  // 传入字符串*
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;loading</td>
+                <td>
+                    &nbsp;text: ''  // false或者不传的话是关闭，true是显示，传入字符串是显示且有文字
+                </td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        const hereUi = new HereUi();
+        const option = ['星期一',{key: '星期二'},{key: '星期三',value: '星期三'},'星期四','星期五','星期六','星期天','下周一','下周二','下周三','下周四'];
+        hereUi.sheet({option: option,title: '选择某天',cancel: '不选'}).then(res => {
+            hereUi.toast(`你选择了第 ${res.result.index + 1} 项的 ${res.result.value}`,'bottom');
+            setTimeout(() => {
+                hereUi.loading();
+                hereUi.modal({title: 'Ajax请求提示',content: '是否要要送这次Ajax请求',cancel: true}).then(res => {
+                    hereUi.loading('正在加载数据中');
+                    setTimeout(() => {
+                        hereUi.loading();
+                        hereUi.toast('加载数据成功');
+                    }, 4000);
+                }).catch(err => {
+                    hereUi.toast('你点击了取消','top');
+                });
+            }, 2000);
+        }).catch(err => {
+            hereUi.modal({title: '提示',content: '你点击了不选'}).then(res => {
+                hereUi.notice('你点击了确定');
+                hereUi.toast(hereUi.timeInfo().localtime);
+            });
+        });
+        console.log(hereUi.timeInfo());
+    </script>
+</body>
+</html>
